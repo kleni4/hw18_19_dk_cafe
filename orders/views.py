@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from .models import Customer, MenuItem, Order, OrderItem
-from .forms import CustomerForm, MenuItemForm, OrderForm, OrderItemForm
-
+from .forms import CustomerForm, MenuItemForm, OrderForm
 
 @require_http_methods(["GET"])
 def customer_list(request):
