@@ -1,0 +1,41 @@
+{% extends 'orders/base.html' %}
+
+{% block title %}Меню{% endblock %}
+
+{% block content %}
+    <h1>Список блюд</h1>
+    <a href="{% url 'menu_item_add_form' %}" class="add-button">Добавить новое блюдо</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Цена</th>
+                <th>Категория</th>
+                <th>Доступно</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in items %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.price }} тг.</td>
+                <td>{{ item.get_category_display }}</td>
+                <td>{{ item.available|yesno:"Да,Нет" }}</td>
+                <td>
+                    <a href="{% url 'menu_item_edit_form' item.pk %}" class="edit-link">✏ Редактировать</a> |
+                    <form method="post" action="{% url 'menu_item_delete' item.pk %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-link" onclick="return confirm('Вы уверены, что хотите удалить это блюдо?')">
+                            🗑 Удалить
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

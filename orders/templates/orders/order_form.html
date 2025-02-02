@@ -1,0 +1,57 @@
+{% extends 'orders/base.html' %}
+
+{% block title %}{% if order %}Редактировать{% else %}Создать{% endif %} заказ{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{% if order %}Редактировать{% else %}Создать{% endif %} заказ</h2>
+    
+    <form method="post" action="{% if order %}{% url 'order_edit' order.pk %}{% else %}{% url 'order_add' %}{% endif %}" novalidate>
+        {% csrf_token %}
+        
+        {% for field in form %}
+        <div class="form-group mb-3">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+            {% endif %}
+            {% if field.errors %}
+            <div class="alert alert-danger mt-1">
+                {{ field.errors }}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <h3>Блюда</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Цена</th>
+                    <th>Количество</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in menu_items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.price }} тг.</td>
+                    <td>
+                        <input type="number" 
+                               name="quantity_{{ item.id }}" 
+                               min="0" 
+                               value="{% if order %}{{ item.quantity }}{% else %}0{% endif %}"
+                               class="form-control">
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a href="{% url 'order_list' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+{% endblock %}

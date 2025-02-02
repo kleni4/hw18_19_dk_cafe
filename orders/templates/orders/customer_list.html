@@ -1,0 +1,37 @@
+{% extends 'orders/base.html' %}
+
+{% block title %}Клиенты{% endblock %}
+
+{% block content %}
+    <h1>Список клиентов</h1>
+    <a href="{% url 'customer_add_form' %}" class="add-button">Добавить нового клиента</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Email</th>
+                <th>Телефон</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for customer in customers %}
+            <tr>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.email }}</td>
+                <td>{{ customer.phone_number }}</td>
+                <td>
+                    <a href="{% url 'customer_edit_form' customer.pk %}" class="edit-link">✏ Редактировать</a> |
+                    <form method="post" action="{% url 'customer_delete' customer.pk %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-link" onclick="return confirm('Вы уверены, что хотите удалить этого клиента?')">
+                            🗑 Удалить
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

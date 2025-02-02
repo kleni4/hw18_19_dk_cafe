@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Кафе - {% block title %}{% endblock %}</title>
+    <style>
+
+
+        /* Основные стили */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7fc;
+            color: #333;
+        }
+
+        /* Навигация */
+        nav {
+            background-color: #1a237e;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            margin: 0 10px;
+            font-size: 16px;
+            font-weight: bold;
+            display: inline-block;
+            transition: background 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #3949ab; /* Более светлый синий */
+            border-radius: 5px;
+        }
+
+        /* Заголовки */
+        h1 {
+            text-align: center;
+            color: #212529;
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #dee2e6;
+            padding-bottom: 10px;
+        }
+
+        /* Список */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        li:hover {
+            transform: scale(1.02);
+        }
+
+        input[type="checkbox"] {
+            transform: scale(1.2);
+            margin-right: 10px;
+        }
+
+        select[multiple] {
+            width: 100%;
+            height: 150px; /* Высота списка */
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            padding: 5px;
+        }
+
+        /* Кнопки */
+        .add-button {
+            display: inline-block;
+            background-color: #4CAF50; /* Зеленый */
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .add-button:hover {
+            background-color: #388E3C;
+            text-decoration: none;
+        }
+
+        .edit-link {
+            color: #FF9800;
+        }
+
+        .delete-link {
+            color: #D32F2F;
+        }
+
+        /* Форма */
+        .form-container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+        }
+
+        .form-field {
+            margin-bottom: 15px;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-field input,
+        .form-field select,
+        .form-field textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus,
+        .form-field textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        /* Кнопки в форме */
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .save-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .save-button:hover {
+            background-color: #388E3C;
+        }
+
+        .cancel-button {
+            background-color: #6c757d;
+            padding: 12px 20px;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .cancel-button:hover {
+            background-color: #5a6268;
+        }
+
+        /* Блок удаления */
+        .delete-container {
+            max-width: 500px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        .delete-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .delete-warning {
+            color: #D32F2F;
+            font-size: 18px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .delete-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .delete-button {
+            background-color: #D32F2F; /* Красный */
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .delete-button:hover {
+            background-color: #B71C1C;
+        }
+
+        /* Футер */
+        footer {
+            background-color: #1a237e;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background-color: #084ed0;
+    color: white;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+.edit-link {
+    color: #ff9800;
+    font-weight: bold;
+}
+
+.delete-link {
+    color: #d32f2f;
+    font-weight: bold;
+}
+
+.delete-link:hover, .edit-link:hover {
+    text-decoration: underline;
+}
+
+
+
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav>
+        <a href="{% url 'customer_list' %}">Клиенты</a> |
+        <a href="{% url 'menu_list' %}">Меню</a> |
+        <a href="{% url 'order_list' %}">Заказы</a>
+    </nav>
+
+    <!-- Основной контент -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- Футер -->
+    <footer>
+        &copy; 2025 Кафе HW18-19
+    </footer>
+</body>
+</html>
