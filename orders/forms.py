@@ -2,6 +2,7 @@ from django import forms
 from django.core.validators import RegexValidator
 from .models import Customer, MenuItem, Order, OrderItem
 
+# https://docs.djangoproject.com/en/5.1/ref/validators/
 class CustomerForm(forms.ModelForm):
     phone_regex = RegexValidator(
         regex=r'^\+?1?\d{9,15}$',

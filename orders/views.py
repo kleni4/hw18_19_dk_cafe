@@ -1,3 +1,5 @@
+
+# https://www.geeksforgeeks.org/get_object_or_404-method-in-django-models/
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
 from .models import Customer, MenuItem, Order, OrderItem
