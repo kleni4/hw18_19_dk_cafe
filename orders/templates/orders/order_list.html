@@ -1,41 +1,73 @@
 {% extends 'orders/base.html' %}
+{% load order_tags %}
 
 {% block title %}Заказы{% endblock %}
 
 {% block content %}
-    <h1>Список заказов</h1>
-    <a href="{% url 'order_add_form' %}" class="add-button">Создать новый заказ</a>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Заказы</h2>
+        <a href="{% url 'order_add_form' %}" class="btn btn-success">+ Создать заказ</a>
+    </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>№</th>
-                <th>Клиент</th>
-                <th>Статус</th>
-                <th>Дата создания</th>
-                <th>Сумма</th>
-                <th>Действия</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for order in orders %}
-            <tr>
-                <td>{{ order.id }}</td>
-                <td>{{ order.customer.name }}</td>
-                <td>{{ order.get_status_display }}</td>
-                <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
-                <td>{{ order.total_price }} тг.</td>
-                <td>
-                    <a href="{% url 'order_edit_form' order.pk %}" class="edit-link">✏ Редактировать</a> |
-                    <form method="post" action="{% url 'order_delete' order.pk %}" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="delete-link" onclick="return confirm('Вы уверены, что хотите удалить этот заказ?')">
-                            🗑 Удалить
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="order-filters">
+        <a href="?" class="filter-link {% if not current_status %}active{% endif %}">
+            Все
+            <span class="filter-count">{{ orders|length }}</span>
+        </a>
+        <a href="?status=wait" class="filter-link {% if current_status == 'wait' %}active{% endif %}">
+            Ожидается
+            <span class="filter-count">{{ orders|get_status_count:'wait' }}</span>
+        </a>
+        <a href="?status=in_progress" class="filter-link {% if current_status == 'in_progress' %}active{% endif %}">
+            В процессе
+            <span class="filter-count">{{ orders|get_status_count:'in_progress' }}</span>
+        </a>
+        <a href="?status=finish" class="filter-link {% if current_status == 'finish' %}active{% endif %}">
+            Завершён
+            <span class="filter-count">{{ orders|get_status_count:'finish' }}</span>
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Клиент</th>
+                        <th>Статус</th>
+                        <th>Дата создания</th>
+                        <th>Сумма</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.customer.name }}</td>
+                        <td>{{ order.get_status_display }}</td>
+                        <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
+                        <td>{{ order.total_price }} тг.</td>
+                        <td>
+                            <a href="{% url 'order_edit_form' order.pk %}" class="btn btn-sm btn-primary">✏ Редактировать</a>
+                            <form method="post" action="{% url 'order_delete' order.pk %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Вы уверены, что хотите удалить этот заказ?')">
+                                    🗑 Удалить
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">Нет заказов</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}

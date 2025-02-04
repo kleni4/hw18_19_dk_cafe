@@ -6,9 +6,10 @@
 <div class="container mt-4">
     <h2>{% if order %}Редактировать{% else %}Создать{% endif %} заказ</h2>
     
-    <form method="post" action="{% if order %}{% url 'order_edit' order.pk %}{% else %}{% url 'order_add' %}{% endif %}" novalidate>
+    <form method="post" action="{% if order %}{% url 'order_edit_form' order.pk %}{% else %}{% url 'order_add_form' %}{% endif %}" novalidate>
         {% csrf_token %}
         
+        <h3>Информация о заказе</h3>
         {% for field in form %}
         <div class="form-group mb-3">
             <label for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -23,7 +24,7 @@
             {% endif %}
         </div>
         {% endfor %}
-
+        
         <h3>Блюда</h3>
         <table class="table">
             <thead>

@@ -25,22 +25,34 @@ class MenuItem(models.Model):
         return self.name
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    items = models.ManyToManyField(MenuItem, through='OrderItem')
-    status = models.CharField(max_length=20, choices=[
+    STATUS_CHOICES = [
         ('wait', 'Ожидается'),
-        ('in progress', 'В процессе'),
-        ('finish', 'Завершён'),
-    ], default='new')
-    created_at = models.DateTimeField(auto_now_add=True)
+        ('in_progress', 'В процессе'),
+        ('finish', 'Завершён')
+    ]
+    
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name='Клиент')
+    items = models.ManyToManyField(MenuItem, through='OrderItem')
+    status = models.CharField(
+        max_length=20, 
+        choices=STATUS_CHOICES, 
+        default='wait',
+        verbose_name='Статус'
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'Заказ {self.id} - {self.customer.name}'
 
     @property
     def total_price(self):
         return sum(item.menu_item.price * item.quantity for item in self.orderitem_set.all())
-
-    def __str__(self):
-        return f"Заказ #{self.id} от {self.created_at.strftime('%d.%m.%Y %H:%M')}"
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)

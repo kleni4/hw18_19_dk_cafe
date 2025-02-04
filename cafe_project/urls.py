@@ -1,12 +1,9 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.shortcuts import redirect
-
-def redirect_to_orders(request):
-    return redirect('order_list')  # Используем name вместо хардкода пути
+from django.views.generic import RedirectView
 
 urlpatterns = [
-    path('', redirect_to_orders, name='home'),
+    path('', RedirectView.as_view(pattern_name='order_list', permanent=False), name='home'),
     path('admin/', admin.site.urls),
     path('', include('orders.urls')),  # Убираем prefix 'orders/'
 ]

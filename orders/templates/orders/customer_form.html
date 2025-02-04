@@ -6,7 +6,7 @@
 <div class="container mt-4">
     <h2>{% if customer %}Редактировать{% else %}Добавить{% endif %} клиента</h2>
     
-    <form method="post" action="{% if customer %}{% url 'customer_edit' customer.pk %}{% else %}{% url 'customer_add' %}{% endif %}" novalidate>
+    <form method="post" action="{% if customer %}{% url 'customer_edit_form' customer.pk %}{% else %}{% url 'customer_add_form' %}{% endif %}" novalidate>
         {% csrf_token %}
         
         {% for field in form %}
